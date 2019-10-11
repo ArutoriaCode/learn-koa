@@ -1,0 +1,22 @@
+{
+	"koa-api": {
+		"prefix": "kApi",
+		"body": [
+			"const Router = require('koa-router')",
+			"",
+      "api = new Router({",
+      " prefix: '/v1/test'",
+      "})",
+			"",
+			"api.get('/', async (ctx) => {",
+			"  ctx.body = {",
+			"    message: 'test'",
+			"  }",
+			"})",
+			"",
+			"module.exports = api",
+			""
+		],
+		"description": "koa api 模板"
+	}
+}
