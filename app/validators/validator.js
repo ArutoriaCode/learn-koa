@@ -22,7 +22,7 @@ class ReisgterValidator extends LinValidator {
       }),
       new Rule('matches', '密码不符合规范', '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]')
     ]
-    this.password1 = this.password1
+    this.password2 = this.password1
     this.nickname = [
       new Rule('isLength', '昵称长度至少4个字符，最多32个字符', {
         min: 4,
