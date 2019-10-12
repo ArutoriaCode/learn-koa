@@ -22,7 +22,7 @@ const catchError = async (ctx, next) => {
       }
       ctx.status = error.code
     } else {
-      const logger = require('../utils/logger')
+      const logger = require('../core/logger')
       logger.error(error) // 生产环境记录未知错误的日志
       ctx.body = {
         msg: '服务器出现了点问题!',
