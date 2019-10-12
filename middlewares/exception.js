@@ -7,7 +7,14 @@ const catchError = async (ctx, next) => {
     await next()
   } catch (error) {
     // console.log(error)
-    if (error instanceof HttpException) {
+    const isHttpException = error instanceof HttpException
+    const isDev = env === 'dev'
+
+    if (isDev && !isHttpException) {
+      throw error
+    }
+
+    if (isHttpException) {
       ctx.body = {
         msg: error.msg,
         error_code: error.errorCode,
@@ -15,18 +22,14 @@ const catchError = async (ctx, next) => {
       }
       ctx.status = error.code
     } else {
-      if (env === 'dev') {
-        throw error
-      } else {
-        const logger = require('../utils/log')
-        logger.error(error) // 生产环境记录未知错误的日志
-        ctx.body = {
-          msg: '服务器出现了点问题!',
-          error_code: 999,
-          request
-        }
-        ctx.status = 500
+      const logger = require('../utils/logger')
+      logger.error(error) // 生产环境记录未知错误的日志
+      ctx.body = {
+        msg: '服务器出现了点问题!',
+        error_code: 999,
+        request
       }
+      ctx.status = 500
     }
   }
 }

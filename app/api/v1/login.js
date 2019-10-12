@@ -7,9 +7,7 @@ api = new Router({
 
 api.get('/:id', async ctx => {
   const v = new PositiveIntergerValidator().validate(ctx)
-  ctx.body = {
-    message: 'ko ko da yo'
-  }
+  
 })
 
 module.exports = api

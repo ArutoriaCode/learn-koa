@@ -3,7 +3,7 @@ const { Sequelize, Model, db } = require('../../core/db')
 class User extends Model {}
 
 User.init({
-  nickName: Sequelize.STRING,
+  nickname: Sequelize.STRING,
   email: Sequelize.STRING,
   password: Sequelize.STRING,
   openid: {
@@ -11,7 +11,8 @@ User.init({
     unique: true
   }
 }, {
-  sequelize: db
+  sequelize: db,
+  tableName: 'user'
 })
 
 module.exports = User
