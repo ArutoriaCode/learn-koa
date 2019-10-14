@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs')
 const Router = require('koa-router')
 
 const { ReisgterValidator } = require('../../validators/validator')
@@ -10,16 +9,25 @@ api = new Router({
 
 api.post('/register', async ctx => {
   const v = await new ReisgterValidator().validate(ctx)
-  const salt = bcrypt.genSaltSync(10)
-  const psw = bcrypt.hashSync(v.get('body.password1'), salt)
-  const user = {
+  const r = await User.create({
     email: v.get('body.email'),
-    password: psw,
+    password: v.get('body.password1'),
     nickname: v.get('body.nickname')
-  }
-  User.create(user)
+  })
   ctx.body = {
     message: '成功！'
+  }
+})
+
+api.get('/id', async ctx => {
+  const user = await User.findOne({
+    where: {
+      id: 1
+    }
+  })
+  ctx.body = {
+    message: '成功！',
+    data: user
   }
 })
 
