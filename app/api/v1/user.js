@@ -15,7 +15,7 @@ api.post('/register', async ctx => {
     password: v.get('body.password1'),
     nickname: v.get('body.nickname')
   })
-  throw new Success()
+  Success('注册成功！')
 })
 
 module.exports = api

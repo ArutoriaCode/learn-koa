@@ -1,5 +1,5 @@
 class HttpException extends Error {
-  constructor(msg='服务器异常', errorCode=10000, code=500) {
+  constructor(msg = '服务器异常', errorCode = 10000, code = 500) {
     super()
     this.msg = msg
     this.errorCode = errorCode
@@ -30,5 +30,7 @@ class Success extends HttpException {
 module.exports = {
   HttpException,
   ParameterException,
-  Success
+  Success: (msg, errorCode, data) => {
+    throw new Success(msg, errorCode, data)
+  }
 }
