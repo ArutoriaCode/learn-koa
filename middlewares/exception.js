@@ -6,7 +6,6 @@ const catchError = async (ctx, next) => {
   try {
     await next()
   } catch (error) {
-    // console.log(error)
     const isHttpException = error instanceof HttpException
     const isDev = env === 'dev'
 
@@ -18,6 +17,7 @@ const catchError = async (ctx, next) => {
       ctx.body = {
         msg: error.msg,
         error_code: error.errorCode,
+        data: error.data,
         request
       }
       ctx.status = error.code

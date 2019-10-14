@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 
 const { ReisgterValidator } = require('../../validators/validator')
+const { Success } = require('../../../core/HttpException')
 const User = require('../../models/user')
 
 api = new Router({
@@ -14,21 +15,7 @@ api.post('/register', async ctx => {
     password: v.get('body.password1'),
     nickname: v.get('body.nickname')
   })
-  ctx.body = {
-    message: '成功！'
-  }
-})
-
-api.get('/id', async ctx => {
-  const user = await User.findOne({
-    where: {
-      id: 1
-    }
-  })
-  ctx.body = {
-    message: '成功！',
-    data: user
-  }
+  throw new Success()
 })
 
 module.exports = api

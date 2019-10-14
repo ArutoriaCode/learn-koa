@@ -4,6 +4,7 @@ class HttpException extends Error {
     this.msg = msg
     this.errorCode = errorCode
     this.code = code
+    this.data = {}
   }
 }
 
@@ -16,7 +17,18 @@ class ParameterException extends HttpException {
   }
 }
 
+class Success extends HttpException {
+  constructor(msg, errorCode, data) {
+    super()
+    this.msg = msg || 'success'
+    this.errorCode = errorCode || 0
+    this.code = 200
+    this.data = data || {}
+  }
+}
+
 module.exports = {
   HttpException,
-  ParameterException
+  ParameterException,
+  Success
 }
