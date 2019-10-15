@@ -10,12 +10,18 @@ api = new Router({
 
 api.post('/register', async ctx => {
   const v = await new ReisgterValidator().validate(ctx)
-  const r = await User.create({
+  
+  await User.create({
     email: v.get('body.email'),
     password: v.get('body.password1'),
     nickname: v.get('body.nickname')
   })
+
   Success('注册成功！')
+})
+
+api.post('/login', async ctx => {
+
 })
 
 module.exports = api
