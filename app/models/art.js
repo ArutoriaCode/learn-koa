@@ -13,7 +13,7 @@ class Art {
 
     switch (type) {
       case 100:
-        art = await Movie.findOneOr404(finder, '找不到相关资源')
+        art = await Movie.scope('bh').findOneOr404(finder, '找不到相关资源')
         break
       case 200:
         art = await Music.findOne(finder)
