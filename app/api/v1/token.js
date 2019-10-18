@@ -5,6 +5,7 @@ const { TokenValidator } = require('../../validators/validator')
 const { LoginType } = require('../../libs/enum')
 const { ParameterException, Success } = require('../../../core/HttpException')
 const { generateToken } = require('../../../core/util')
+const Auth = require('../../../middlewares/auth')
 
 api = new Router({
   prefix: '/v1/token'
@@ -21,6 +22,8 @@ api.post('/', async ctx => {
       break
     case LoginType.USER_MINI_PROGRAM:
       break
+    case LoginType.ADMIN_EMAIL:
+      break
     default:
       throw new ParameterException('没有相应的处理函数。')
   }
@@ -32,7 +35,11 @@ api.post('/', async ctx => {
 
 async function emailLogin(account, password) {
   const user = await User.verifyEmailPassword(account, password)
-  return generateToken(user.id, 2)
+  return generateToken(user.id, Auth.USER)
+}
+
+async function wxLogin(code) {
+
 }
 
 module.exports = api

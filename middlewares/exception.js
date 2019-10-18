@@ -17,8 +17,10 @@ const catchError = async (ctx, next) => {
       ctx.body = {
         msg: error.msg,
         error_code: error.errorCode,
-        data: error.data,
         request
+      }
+      if (error.data instanceof Object && Object.keys(error.data).length) {
+        ctx.body['data'] = error.data
       }
       ctx.status = error.code
     } else {
