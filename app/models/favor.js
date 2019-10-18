@@ -1,7 +1,7 @@
 const { db, Sequelize, Model } = require('../../core/db')
 const { Movie, Music, Sentence } = require('./classic')
 const Art = require('./Art')
-const { LikeError, DisLikeError } = require('../../core/HttpException')
+const { LikeError, DislikeError } = require('@errors')
 
 class Favor extends Model {
 
@@ -13,7 +13,7 @@ class Favor extends Model {
     if (favor) throw new LikeError()
     return db.transaction(async t => {
       await Favor.create(likeFiled, { transaction: t })
-      const art = await Art.getData(art_id, type)
+      const art = await Art.getData(art_id, type, false)
       await art.increment('fav_nums', { by: 1, transaction: t })
     })
   }
@@ -22,13 +22,13 @@ class Favor extends Model {
     const favor = await Favor.findOne({
       where: { art_id, type, uid }
     })
-    if (!favor) throw new DisLikeError()
+    if (!favor) throw new DislikeError()
     return db.transaction(async t => {
       await favor.destroy({
         force: false,
         transaction: t
       })
-      const art = await Art.getData(art_id, type)
+      const art = await Art.getData(art_id, type, false)
       await art.decrement('fav_nums', { by: 1, transaction: t })
     })
   }
