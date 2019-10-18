@@ -32,7 +32,7 @@ class NotFound extends HttpException {
     super()
     this.msg = msg || '资源不存在'
     this.errorCode = errorCode || 10001
-    this.code = 200
+    this.code = 404
   }
 }
 
@@ -54,13 +54,34 @@ class Forbbiden extends HttpException {
   }
 }
 
+class LikeError extends HttpException {
+  constructor(errorCode) {
+    super()
+    this.msg = '你已经点过赞'
+    this.errorCode = errorCode || 60001
+    this.code = 400
+  }
+}
+
+class DislikeError extends HttpException {
+  constructor(errorCode) {
+    super()
+    this.msg = '你已取消点赞'
+    this.errorCode = errorCode || 60002
+    this.code = 400
+  }
+}
+
 module.exports = {
   HttpException,
   ParameterException,
   NotFound,
   AuthFailed,
   Forbbiden,
-  Success: ({msg, errorCode, data}) => {
+  LikeError,
+  DislikeError,
+  Success: (options = {}) => {
+    const { msg = 'success', errorCode = 0, data = {} } = options
     throw new Success(msg, errorCode, data)
   }
 }

@@ -1,8 +1,10 @@
 const Router = require('koa-router')
 
 const Auth = require('../../../middlewares/auth')
-const Flow = require('../../models/flow')
-const Art = require('../../models/art')
+
+const Flow = require('@models/flow')
+const Favor = require('@models/favor')
+const Art = require('@models/art')
 
 api = new Router({
   prefix: '/v1/classic'
@@ -14,7 +16,10 @@ api.get('/latest', new Auth().verify, async ctx => {
       ['index', 'DESC']
     ]
   })
-  const art = await Art.getData(20, flow.type)
+  const art = await Art.getData(flow.art_id, flow.type)
+  const likeLatest = await Favor.userLikeIt(flow.art_id, flow.type, ctx.auth.uid)
+  art.setDataValue('index', flow.index)
+  art.setDataValue('like_status', likeLatest)
   ctx.body = art
 })
 

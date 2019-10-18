@@ -1,4 +1,4 @@
-const {Sequelize, Model: _Model} = require('sequelize')
+const { Sequelize, Model: _Model } = require('sequelize')
 const {
   dbName, host, port, user, password
 } = require('../config/config').database
@@ -9,19 +9,17 @@ const {
 class Model extends _Model {
 
   static async findOneOr404(options, errmsg) {
-    
-    const rst = await this.findOne(options)
-    
-    if (!rst) throw new NotFound(errmsg || '资源不存在')
-    
-    return rst
-
+    let rsp = await this.findOne(options)
+    if (!rsp) {
+      throw new NotFound(errmsg)
+    }
+    return rsp
   }
 
 }
 
 const sequelize = new Sequelize(dbName, user, password, {
-  host, 
+  host,
   port,
   dialect: 'mysql',
   logging: true,

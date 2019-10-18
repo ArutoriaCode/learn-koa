@@ -2,6 +2,15 @@ const User = require('../../app/models/user')
 const { LinValidator, Rule } = require('../../core/lin-validator-v2')
 const { LoginType } = require('../libs/enum')
 
+function checkType (vals) {
+  if (!vals.body.type) {
+    throw new Error('type is must!')
+  }
+  if (!LoginType.isThisType(vals.body.type)) {
+    throw new Error('type 参数不合法！')
+  }
+}
+
 class PositiveIntergerValidator extends LinValidator {
   constructor() {
     super()
@@ -56,6 +65,7 @@ class ReisgterValidator extends LinValidator {
 class TokenValidator extends LinValidator {
   constructor() {
     super()
+    this.validateLoginType = checkType
     this.account = [
       new Rule('isLength', '不符合账号规则', {
         min: 4,
@@ -70,20 +80,18 @@ class TokenValidator extends LinValidator {
       })
     ]
   }
+}
 
-  validateLoginType(vals) {
-    if (!vals.body.type) {
-      throw new Error('type is must!')
-    }
-    if (!LoginType.isThisType(vals.body.type)) {
-      throw new Error('type 参数不合法！')
-    }
+class LikeValidator extends PositiveIntergerValidator {
+  constructor() {
+    super()
+    this.validateType = checkType
   }
-
 }
 
 module.exports = {
   PositiveIntergerValidator,
   ReisgterValidator,
-  TokenValidator
+  TokenValidator,
+  LikeValidator
 }
