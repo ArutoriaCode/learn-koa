@@ -33,6 +33,7 @@
     "@models": "app/models",
     "@core": "core",
     "@errors": "core/HttpException.js",
-    "@config": "config"
+    "@config": "config/config.js",
+    "@auth": "middlewares/auth.js"
   }
 }

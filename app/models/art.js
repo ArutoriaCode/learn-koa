@@ -16,10 +16,10 @@ class Art {
         art = await Movie.scope('bh').findOneOr404(finder, '找不到相关资源')
         break
       case 200:
-        art = await Music.findOne(finder)
+        art = await Music.scope('bh').findOne(finder)
         break
       case 300:
-        art = await Sentence.findOne(finder)
+        art = await Sentence.scope('bh').findOne(finder)
         break
     }
 
