@@ -11,16 +11,44 @@ api = new Router({
 })
 
 api.get('/latest', new Auth().verify, async ctx => {
-  const flow = await Flow.findOne({
+  const art = await findArt({
     order: [
       ['index', 'DESC']
     ]
   })
-  const art = await Art.getData(flow.art_id, flow.type)
-  const likeLatest = await Favor.userLikeIt(flow.art_id, flow.type, ctx.auth.uid)
-  art.setDataValue('index', flow.index)
-  art.setDataValue('like_status', likeLatest)
   ctx.body = art
 })
+
+api.get('/:index/next', new Auth.verify, async ctx => {
+  const index = v.get('path.index')
+  const art = await findArt({
+    where: {
+      index: index + 1
+    }
+  })
+  ctx.body = art
+})
+
+api.get('/:index/previous', new Auth.verify, async ctx => {
+  const index = v.get('path.index')
+  const art = await findArt({
+    where: {
+      index: index - 1
+    }
+  })
+  ctx.body = art
+})
+
+async function findArt (query) {
+  const { art_id, type, index } = await Flow.findOne(query)
+
+  const art = await Art.getData(art_id, type)
+  const likeStatus = await Favor.userLikeIt(art_id, type, ctx.auth.uid)
+  
+  art.setDataValue('index', index)
+  art.setDataValue('like_status', likeStatus)
+  
+  return art
+}
 
 module.exports = api
