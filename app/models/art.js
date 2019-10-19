@@ -13,13 +13,13 @@ class Art {
     const scopeName = useScope ? 'bh' : null
     switch (type) {
       case 100:
-        art = await Movie.scope(scopeName).findOneOr404(finder, '找不到相关资源')
+        art = await Movie.scope(scopeName).findOneOr404(finder, '找不到相关期刊')
         break
       case 200:
-        art = await Music.scope(scopeName).findOne(finder)
+        art = await Music.scope(scopeName).findOneOr404(finder, '找不到相关期刊')
         break
       case 300:
-        art = await Sentence.scope(scopeName).findOne(finder)
+        art = await Sentence.scope(scopeName).findOneOr404(finder, '找不到相关期刊')
         break
     }
 

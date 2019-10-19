@@ -4,7 +4,7 @@ const Auth = require('@auth')
 const Flow = require('@models/flow')
 const Favor = require('@models/favor')
 const Art = require('@models/art')
-const { PositiveIntergerValidator } = require('@validator')
+const { PositiveIntergerValidator, ClassicValidator } = require('@validator')
 
 api = new Router({
   prefix: '/v1/classic'
@@ -43,6 +43,18 @@ api.get('/:index/previous', new Auth().verify, async ctx => {
     }
   }, ctx.auth.uid)
   ctx.body = art
+})
+
+api.get('/:type/:id/favor', new Auth().verify, async ctx => {
+  const v = await new ClassicValidator().validate(ctx)
+  const id = v.get('path.id')
+  const type = parseInt(v.get('path.type'))
+  const art = await Art.getData(id, type)
+  const likeStatus = await Favor.userLikeIt(id, type, ctx.auth.uid)
+  ctx.body = {
+    'fav_nums': art.fav_nums,
+    'like_status': likeStatus
+  }
 })
 
 async function findArt (query, uid) {
