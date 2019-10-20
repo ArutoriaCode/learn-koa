@@ -72,10 +72,12 @@ api.get('/:type/:id', new Auth().verify, async ctx => {
   const type = parseInt(v.get('path.type'))
   const art = await Art.getData(id, type)
   const likeStatus = await Favor.userLikeIt(id, type, ctx.auth.uid)
-  ctx.body = {
-    art,
-    'like_status': likeStatus
-  }
+  Success({
+    data: {
+      art,
+      'like_status': likeStatus
+    }
+  })
 })
 
 async function findArt (query, uid) {
