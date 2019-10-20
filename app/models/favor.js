@@ -1,7 +1,7 @@
-const { db, Sequelize, Model } = require('../../core/db')
+const { db, Sequelize, Model, Op } = require('../../core/db')
 const { Movie, Music, Sentence } = require('./classic')
 const Art = require('./Art')
-const { LikeError, DislikeError } = require('@errors')
+const { LikeError, DislikeError, Notfound } = require('@errors')
 
 class Favor extends Model {
 
@@ -38,6 +38,21 @@ class Favor extends Model {
       where: { art_id, type, uid }
     })
     return favor ? true : false
+  }
+
+  static async getMyClassicFavors(uid) {
+    const favors = await Favor.findAll({
+      where: {
+        uid,
+        type: {
+          [Op.not]: 400
+        }
+      }
+    })
+
+    if (!favors) throw new Notfound('没有收藏任何期刊')
+
+    return await Art.getList(favors)
   }
 
 }

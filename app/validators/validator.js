@@ -4,8 +4,8 @@ const { LoginType, ArtType } = require('../libs/enum')
 
 class CheckedType {
   constructor(type, source) {
-    this.enumType = type
-    this.source = source
+    this.enumType = type || LoginType
+    this.source = source || 'body'
   }
 
   checkType(vals) {
@@ -72,7 +72,7 @@ class ReisgterValidator extends LinValidator {
 class TokenValidator extends LinValidator {
   constructor() {
     super()
-    const checker = new CheckedType(LoginType, 'body')
+    const checker = new CheckedType()
     this.validateLoginType = checker.checkType.bind(checker)
     this.account = [
       new Rule('isLength', '不符合账号规则', {
@@ -93,7 +93,7 @@ class TokenValidator extends LinValidator {
 class LikeValidator extends PositiveIntergerValidator {
   constructor() {
     super()
-    const checker = new CheckedType(LoginType, 'body')
+    const checker = new CheckedType()
     this.validateType = checker.checkType.bind(checker)
   }
 }

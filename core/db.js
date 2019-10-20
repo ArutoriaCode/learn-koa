@@ -1,4 +1,4 @@
-const { Sequelize, Model: _Model } = require('sequelize')
+const { Sequelize, Model: _Model, Op } = require('sequelize')
 const {
   dbName, host, port, user, password
 } = require('../config/config').database
@@ -48,5 +48,6 @@ sequelize.sync({
 module.exports = {
   Sequelize,
   Model,
+  Op,
   db: sequelize
 }

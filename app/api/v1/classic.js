@@ -4,6 +4,7 @@ const Auth = require('@auth')
 const Flow = require('@models/flow')
 const Favor = require('@models/favor')
 const Art = require('@models/art')
+const { Success } = require('@errors')
 const { PositiveIntergerValidator, ClassicValidator } = require('@validator')
 
 api = new Router({
@@ -45,6 +46,14 @@ api.get('/:index/previous', new Auth().verify, async ctx => {
   ctx.body = art
 })
 
+api.get('/favor', new Auth().verify, async ctx => {
+  const uid = ctx.auth.uid
+  const favors = await Favor.getMyClassicFavors(uid)
+  Success({
+    data: favors
+  })
+})
+
 api.get('/:type/:id/favor', new Auth().verify, async ctx => {
   const v = await new ClassicValidator().validate(ctx)
   const id = v.get('path.id')
@@ -53,6 +62,18 @@ api.get('/:type/:id/favor', new Auth().verify, async ctx => {
   const likeStatus = await Favor.userLikeIt(id, type, ctx.auth.uid)
   ctx.body = {
     'fav_nums': art.fav_nums,
+    'like_status': likeStatus
+  }
+})
+
+api.get('/:type/:id', new Auth().verify, async ctx => {
+  const v = await new ClassicValidator().validate(ctx)
+  const id = v.get('path.id')
+  const type = parseInt(v.get('path.type'))
+  const art = await Art.getData(id, type)
+  const likeStatus = await Favor.userLikeIt(id, type, ctx.auth.uid)
+  ctx.body = {
+    art,
     'like_status': likeStatus
   }
 })
