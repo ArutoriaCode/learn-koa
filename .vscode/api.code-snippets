@@ -3,9 +3,9 @@
 		"prefix": "kApi",
 		"body": [
 			"const Router = require('koa-router')",
-			"",
+			"const { Success } = require('@errors')",
       "api = new Router({",
-      "  prefix: '/v1/???'",
+      "  prefix: '/v1/name'",
       "})",
 			"",
 			"api.get('/', async ctx => {",
@@ -18,5 +18,21 @@
 			""
 		],
 		"description": "koa api 模板"
-	}
+  },
+  "koa-model": {
+    "prefix": "kModel",
+    "body": [
+      "const { db, Sequelize, Model } = require('@core/db')",
+      "",
+      "class ModelName extends Model { }",
+      "",
+      "ModelName.init({}, {",
+      "  sequelize: db,",
+      "  tableName: 'modelName'",
+      "})",
+      "",
+      "module.exports = ModelName",
+      ""
+    ]
+  }
 }
