@@ -44,7 +44,7 @@ class ReisgterValidator extends LinValidator {
     ]
 
     this.password2 = this.password1
-    
+
     this.nickname = [
       new Rule('isLength', '昵称长度至少4个字符，最多32个字符', {
         min: 4,
@@ -93,7 +93,7 @@ class TokenValidator extends LinValidator {
 class LikeValidator extends PositiveIntergerValidator {
   constructor() {
     super()
-    const checker = new CheckedType()
+    const checker = new CheckedType(ArtType)
     this.validateType = checker.checkType.bind(checker)
   }
 }
@@ -106,10 +106,37 @@ class ClassicValidator extends LikeValidator {
   }
 }
 
+class SearchValidator extends LinValidator {
+  constructor() {
+    super()
+    this.q = [
+      new Rule('isLength', '搜索关键词不能为空', {
+        min: 1,
+        max: 16
+      })
+    ]
+    this.start = [
+      new Rule('isInt', 'start 不符合要求', {
+        min: 0,
+        max: 60000
+      }),
+      new Rule('isOptional', '', 0)
+    ]
+    this.count = [
+      new Rule('isInt', 'count 不符合要求', {
+        min: 1,
+        max: 20
+      }),
+      new Rule('isOptional', '', 20)
+    ]
+  }
+}
+
 module.exports = {
   PositiveIntergerValidator,
   ReisgterValidator,
   TokenValidator,
   LikeValidator,
-  ClassicValidator
+  ClassicValidator,
+  SearchValidator
 }

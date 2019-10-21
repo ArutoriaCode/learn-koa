@@ -1,7 +1,6 @@
 const { db, Sequelize, Model, Op } = require('../../core/db')
-const { Movie, Music, Sentence } = require('./classic')
 const Art = require('./Art')
-const { LikeError, DislikeError, Notfound } = require('@errors')
+const { LikeError, DislikeError, NotFound } = require('@errors')
 
 class Favor extends Model {
 
@@ -14,6 +13,7 @@ class Favor extends Model {
     return db.transaction(async t => {
       await Favor.create(likeFiled, { transaction: t })
       const art = await Art.getData(art_id, type, false)
+      if (!art) throw new NotFound('点赞失败！')
       await art.increment('fav_nums', { by: 1, transaction: t })
     })
   }

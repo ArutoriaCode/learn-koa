@@ -74,7 +74,6 @@ class Art {
         art = await Sentence.scope(scopeName).findOneOr404(finder, '找不到相关期刊')
         break
     }
-
     return art
   }
 }

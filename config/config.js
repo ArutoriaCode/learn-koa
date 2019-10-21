@@ -11,5 +11,8 @@ module.exports = {
     secretKey: '/1&*9a0$@3549*&(@)',
     expiresIn: 60 * 60 * 24
   },
-  
+  yushu: {
+    detailUrl: 'http://t.yushu.im/v2/book/id/%s',
+    keywordUrl: 'http://t.yushu.im/v2/book/search?q=%s&count=%s&start=%s&summary=%s'
+  }
 }
