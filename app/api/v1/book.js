@@ -3,8 +3,9 @@ const Router = require('koa-router')
 const HotBook = require('@models/hot-book')
 const Book = require('@models/book')
 const Favor = require('@models/favor')
+const Comment = require('@models/book-comment')
 const Auth = require('../../../middlewares/auth')
-const { PositiveIntergerValidator, SearchValidator } = require('@validator')
+const { PositiveIntergerValidator, SearchValidator, AddShortCommentValidator } = require('@validator')
 const { Success } = require('@errors')
 
 api = new Router({
@@ -46,6 +47,24 @@ api.get('/:book_id/favor', new Auth().verify, async ctx => {
   const result = await Favor.getBookFavor(ctx.auth.uid, v.get('path.book_id'))
   Success({
     data: result
+  })
+})
+
+api.post('/add/short_comment', new Auth().verify, async ctx => {
+  const v = await new AddShortCommentValidator().validate(ctx, {
+    id: 'book_id'
+  })
+  await Comment.addComment(v.get('body.book_id'), v.get('body.content'))
+  Success()
+})
+
+api.get('/:book_id/short_comment', new Auth().verify, async ctx => {
+  const v = await new PositiveIntergerValidator().validate(ctx, {
+    id: 'book_id'
+  })
+  const comments = await Comment.getComments(v.get('path.book_id'))
+  Success({
+    data: comments
   })
 })
 

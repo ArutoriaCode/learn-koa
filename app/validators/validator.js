@@ -132,11 +132,24 @@ class SearchValidator extends LinValidator {
   }
 }
 
+class AddShortCommentValidator extends PositiveIntergerValidator {
+  constructor() {
+    super()
+    this.content = [
+      new Rule('isLength', '必须在1到24个字符之间', {
+        min: 1,
+        max: 24
+      })
+    ]
+  }
+}
+
 module.exports = {
   PositiveIntergerValidator,
   ReisgterValidator,
   TokenValidator,
   LikeValidator,
   ClassicValidator,
-  SearchValidator
+  SearchValidator,
+  AddShortCommentValidator
 }
