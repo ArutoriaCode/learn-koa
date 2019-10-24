@@ -41,8 +41,8 @@ const findMembers = function (instance, {
 const generateToken = (uid, scope) => {
     const { secretKey, expiresIn } = security
     const token = jwt.sign({
-       uid,
-       scope
+        uid,
+        scope
     }, secretKey, {
         expiresIn
     })

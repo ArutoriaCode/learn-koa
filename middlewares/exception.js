@@ -19,9 +19,8 @@ const catchError = async (ctx, next) => {
         error_code: error.errorCode,
         request
       }
-      if (error.data instanceof Object && Object.keys(error.data).length) {
-        ctx.body['data'] = error.data
-      }
+      const hasData = error.data instanceof Object && Object.keys(error.data).length
+      if (hasData) ctx.body['data'] = error.data
       ctx.status = error.code
     } else {
       const logger = require('../core/logger')

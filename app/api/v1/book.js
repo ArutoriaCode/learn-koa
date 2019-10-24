@@ -2,6 +2,8 @@ const Router = require('koa-router')
 
 const HotBook = require('@models/hot-book')
 const Book = require('@models/book')
+const Favor = require('@models/favor')
+const Auth = require('../../../middlewares/auth')
 const { PositiveIntergerValidator, SearchValidator } = require('@validator')
 const { Success } = require('@errors')
 
@@ -26,6 +28,25 @@ api.get('/search', async ctx => {
   const v = await new SearchValidator().validate(ctx)
   const result = await Book.searchFromYushu(v.get('query.q'), v.get('query.start'), v.get('query.count'))
   Success({ data: result })
+})
+
+api.get('/favor/count', new Auth().verify, async ctx => {
+  const count = await Book.getMyFavorBookCount(ctx.auth.uid)
+  Success({
+    data: {
+      count
+    }
+  })
+})
+
+api.get('/:book_id/favor', new Auth().verify, async ctx => {
+  const v = await new PositiveIntergerValidator().validate(ctx, {
+    id: 'book_id'
+  })
+  const result = await Favor.getBookFavor(ctx.auth.uid, v.get('path.book_id'))
+  Success({
+    data: result
+  })
 })
 
 module.exports = api
