@@ -6,6 +6,9 @@ const {
 const {
   NotFound
 } = require('../core/HttpException')
+const {
+  baseHost
+} = require('../config/config')
 
 class Model extends _Model {
 
@@ -23,6 +26,13 @@ class Model extends _Model {
     unset(data, 'created_at')
     unset(data, 'deleted_at')
     if (isArray(this.exclude)) this.exclude.forEach(v => unset(data, v))
+    for (let key in data) {
+      if (key === 'image') {
+        if (!data[key].startsWith('http')) {
+          data[key] = baseHost + data[key]
+        }
+      }
+    }
     return data
   }
 
