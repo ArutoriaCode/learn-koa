@@ -7,11 +7,6 @@ const { yushu } = require('@config')
 const Favor = require('@models/favor')
 
 class Book extends Model { 
-  
-  constructor(id) {
-    super()
-    this.id = id
-  }
 
   async detail() {
     const url = util.format(yushu.detailUrl, this.id)

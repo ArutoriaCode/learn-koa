@@ -1,4 +1,5 @@
 const { Sequelize, Model: _Model, Op } = require('sequelize')
+const { unset, clone, isArray } = require('lodash')
 const {
   dbName, host, port, user, password
 } = require('../config/config').database
@@ -14,6 +15,15 @@ class Model extends _Model {
       throw new NotFound(errmsg)
     }
     return rsp
+  }
+
+  toJSON() {
+    let data = clone(this.dataValues)
+    unset(data, 'updated_at')
+    unset(data, 'created_at')
+    unset(data, 'deleted_at')
+    if (isArray(this.exclude)) this.exclude.forEach(v => unset(data, v))
+    return data
   }
 
 }
