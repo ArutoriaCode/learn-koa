@@ -7,4 +7,4 @@ app = new Koa()
 
 InitManager.InitCore(app)
 
-app.listen(3001)
+app.listen(3000)
